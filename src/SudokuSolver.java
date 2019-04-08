@@ -11,6 +11,7 @@ public class SudokuSolver extends JPanel {
     private static final long serialVersionUID = 2474932357256719501L;
     private final int WIDTH = 300;
     private final int HEIGHT = 300;
+    private Board board;
     
     public static void main(String[] args) {
         JFrame frame = new JFrame("Sudoku");
@@ -25,6 +26,7 @@ public class SudokuSolver extends JPanel {
     }
     
     public SudokuSolver() {
+        board = new Board(new int[9][9]);
         
         setFocusable(true);
         requestFocus();
