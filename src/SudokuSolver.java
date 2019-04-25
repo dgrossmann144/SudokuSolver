@@ -27,6 +27,12 @@ public class SudokuSolver extends JPanel {
         SudokuSolver panel = new SudokuSolver();
         frame.getContentPane().add(panel);
         
+        for(int i = 0; i < 100; i++) {
+            board.trimPossibleValues();
+            board.insertSinglePossibilities();
+            panel.repaint();
+        }
+        
         frame.pack();
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
@@ -48,7 +54,6 @@ public class SudokuSolver extends JPanel {
             }
             boardScanner.close();
             board = new Board(inputBoard, defaultValues);
-            board.trimPossibleValues();
         } catch (FileNotFoundException e) {
             System.err.println(e);
         }

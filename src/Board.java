@@ -18,6 +18,13 @@ public class Board {
             }
         }
         this.defaultValues = defaultValues;
+        for(int x = 0; x < defaultValues.length; x++) {
+            for(int y = 0; y < defaultValues[x].length; y++) {
+                if(defaultValues[x][y]) {
+                    possibleValues[x][y].clearPossibilities();
+                }
+            }
+        }
         this.selected = new Point(0, 0);
     }
     
@@ -53,14 +60,23 @@ public class Board {
     public void typeNumber(int num) {
         if(!defaultValues[selected.y][selected.x]) {
             board[selected.y][selected.x] = num;
+            possibleValues[selected.y][selected.x].clearPossibilities();
+        }
+    }
+    
+    public void insertNumber(int num, int x, int y) {
+        if(!defaultValues[y][x]) {
+            board[y][x] = num;
+            possibleValues[y][x].clearPossibilities();
         }
     }
     
     //Removes the options every box cannot be from the possibleValues array
     public void trimPossibleValues() {
         trimBoxes();
-        trimVerticalLines();
-        trimHorizontalLines();
+        trimVertical();
+        trimHorizontal();
+//        printPossibleBoard();
     }
     
     private void trimBoxes() {
@@ -79,21 +95,67 @@ public class Board {
         }
     }
     
-    private void trimVerticalLines() {
+    private void trimVertical() {
+        for(int x = 0; x < board.length; x++) {
+            for(int y = 0; y < board[x].length; y++) {
+                for(int z = 0; z < board[x].length; z++) {
+                    possibleValues[y][x].removePossibility(board[z][x]);
+                }
+            }
+        }
         
-        trimComplexVerticalLines();
+        trimComplexVertical();
     }
     
-    private void trimComplexVerticalLines() {
+    private void trimComplexVertical() {
         
     }
     
-    private void trimHorizontalLines() {
+    private void trimHorizontal() {
+        for(int x = 0; x < board.length; x++) {
+            for(int y = 0; y < board[x].length; y++) {
+                for(int z = 0; z < board[x].length; z++) {
+                    possibleValues[x][y].removePossibility(board[x][z]);
+                }
+            }
+        }
         
-        trimComplexHorizontalLines();
+        trimComplexHorizontal();
     }
     
-    private void trimComplexHorizontalLines() {
+    private void trimComplexHorizontal() {
         
     }
+    
+    public void insertSinglePossibilities() {
+        for(int x = 0; x < board.length; x++) {
+            for(int y = 0; y < board[x].length; y++) {
+                if(possibleValues[x][y].isOnlyOption() != 0) {
+                    insertNumber(possibleValues[x][y].isOnlyOption(), y, x);
+                }
+            }
+        }
+    }
+    
+    public void printBoard() {
+        for(int x = 0; x < board.length; x++) {
+            for(int y = 0; y < board[x].length; y++) {
+                System.out.print(board[x][y]);
+            }
+            System.out.println();
+        }
+    }
+    
+    public void printPossibleBoard() {
+        for(int x = 0; x < possibleValues.length; x++) {
+            for(int y = 0; y < possibleValues[x].length; y++) {
+                possibleValues[x][y].printPossibleValues();
+                System.out.println();
+            }
+        }
+    }
+    
+//    public boolean isSolved() {
+//        
+//    }
 }
