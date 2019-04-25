@@ -36,18 +36,19 @@ public class SudokuSolver extends JPanel {
         try {
             Scanner boardScanner = new Scanner(new File("./src/BoardInput.txt"));
             int[][] inputBoard = new int[9][9];
-            boolean[][] defaultValue = new boolean[9][9];
+            boolean[][] defaultValues = new boolean[9][9];
             for(int x = 0; x < 9; x++) {
                 String line = boardScanner.nextLine();
                 for(int y = 0; y < 9; y++) {
                     inputBoard[x][y] = Integer.parseInt(line.charAt(y)+"");
                     if(inputBoard[x][y] != 0) {
-                        defaultValue[x][y] = true;
+                        defaultValues[x][y] = true;
                     }
                 }
             }
             boardScanner.close();
-            board = new Board(inputBoard, defaultValue);
+            board = new Board(inputBoard, defaultValues);
+            board.trimPossibleValues();
         } catch (FileNotFoundException e) {
             System.err.println(e);
         }
