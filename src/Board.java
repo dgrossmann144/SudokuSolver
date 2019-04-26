@@ -2,8 +2,6 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Point;
-import java.util.HashMap;
-import java.util.Map;
 
 public class Board {
     private int[][] board;
@@ -130,6 +128,12 @@ public class Board {
     }
     
     public void insertSinglePossibilities() {
+        insertOnlyOption();
+        insertOnlyLine();
+        insertOnlyBox();
+    }
+    
+    private void insertOnlyOption() {
         for(int x = 0; x < board.length; x++) {
             for(int y = 0; y < board[x].length; y++) {
                 if(possibleValues[x][y].isOnlyOption() != 0) {
@@ -137,7 +141,9 @@ public class Board {
                 }
             }
         }
-        
+    }
+    
+    private void insertOnlyLine() {
         ValueCount[] onlyRow = new ValueCount[9];
         ValueCount[] onlyColumn = new ValueCount[9];
         for(int x = 0; x < board.length; x++) {
@@ -174,8 +180,36 @@ public class Board {
                 }
             }
         }
-        
-        
+    }
+    
+    private void insertOnlyBox() {
+        ValueCount[] onlyBox = new ValueCount[9];
+        for(int x = 0; x < 3; x++) {
+            for(int y = 0; y < 3; y++) {
+                for(int i = 0; i < onlyBox.length; i++) {
+                    onlyBox[i] = new ValueCount();
+                }
+                
+                for(int i = 0; i < 3; i++) {
+                    for(int j = 0; j < 3; j++) {
+                        if(board[x*3+i][y*3+j] != 0) {
+                            onlyBox[board[x*3+i][y*3+j]-1].overCount();
+                        }
+                        for(int k = 1; k <= 9; k++) {
+                            if(possibleValues[x*3+i][y*3+j].canBe(k)) {
+                                onlyBox[k-1].update(x*3+i, y*3+j);
+                            }
+                        }
+                    }
+                }
+                
+                for(int i = 0; i < onlyBox.length; i++) {
+                    if(onlyBox[i].getCount() == 1) {
+                        insertNumber(i+1, onlyBox[i].getY(), onlyBox[i].getX());
+                    }
+                }
+            }
+        }
     }
     
     public void printBoard() {
