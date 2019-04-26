@@ -2,6 +2,8 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Board {
     private int[][] board;
@@ -135,6 +137,45 @@ public class Board {
                 }
             }
         }
+        
+        ValueCount[] onlyRow = new ValueCount[9];
+        ValueCount[] onlyColumn = new ValueCount[9];
+        for(int x = 0; x < board.length; x++) {
+            for(int i = 0; i < onlyRow.length; i++) {
+                onlyRow[i] = new ValueCount();
+            }
+            for(int i = 0; i < onlyColumn.length; i++) {
+                onlyColumn[i] = new ValueCount();
+            }
+            for(int y = 0; y < board[x].length; y++) {
+                if(board[x][y] != 0) {
+                    onlyRow[board[x][y]-1].overCount();
+                }
+                for(int i = 1; i <= 9; i++) {
+                    if(possibleValues[x][y].canBe(i)) {
+                        onlyRow[i-1].update(x, y);
+                    }
+                }
+                if(board[y][x] != 0) {
+                    onlyColumn[board[y][x]-1].overCount();
+                }
+                for(int i = 1; i <= 9; i++) {
+                    if(possibleValues[y][x].canBe(i)) {
+                        onlyColumn[i-1].update(x, y);
+                    }
+                }
+            }
+            for(int i = 0; i < onlyRow.length; i++) {
+                if(onlyRow[i].getCount() == 1) {
+                    insertNumber(i+1, onlyRow[i].getY(), onlyRow[i].getX());
+                }
+                if(onlyColumn[i].getCount() == 1) {
+                    insertNumber(i+1, onlyColumn[i].getX(), onlyColumn[i].getY());
+                }
+            }
+        }
+        
+        
     }
     
     public void printBoard() {
@@ -156,6 +197,15 @@ public class Board {
     }
     
 //    public boolean isSolved() {
+//        Set<Integer> fullList = new HashSet<Integer>();
+//        Set<Integer> testList;
+//        
+//        for(int i = 0; i < board.length; i++) {
+//            for(int j = 0; j < board[i].length; j++) {
+//                
+//            }
+//        }
 //        
 //    }
 }
+

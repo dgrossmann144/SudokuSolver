@@ -17,6 +17,10 @@ public class PossibleValues {
         this.values.add(9);
     }
     
+    public Set<Integer> getAllValues() {
+        return values;
+    }
+    
     public boolean canBe(int value) {
         return this.values.contains(value);
     }
