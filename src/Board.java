@@ -2,6 +2,8 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Board {
     private int[][] board;
@@ -77,6 +79,9 @@ public class Board {
         trimVertical();
         trimHorizontal();
 //        printPossibleBoard();
+//        System.out.println("--------------------------------------------------------");
+//        trimComplex();
+//        printPossibleBoard();
     }
     
     private void trimBoxes() {
@@ -103,12 +108,6 @@ public class Board {
                 }
             }
         }
-        
-        trimComplexVertical();
-    }
-    
-    private void trimComplexVertical() {
-        
     }
     
     private void trimHorizontal() {
@@ -119,12 +118,70 @@ public class Board {
                 }
             }
         }
-        
-        trimComplexHorizontal();
     }
     
-    private void trimComplexHorizontal() {
-        
+    private void trimComplex() {
+        List<Point> points = new ArrayList<Point>();
+        //Goes through each box
+        for(int x = 0; x < 3; x++) {
+            for(int y = 0; y < 3; y++) {
+                for(int num = 1; num <= 9; num++) {
+                    points.clear();
+                    //Add all instances of num in possible values to list
+                    for(int i = 0; i < 3; i++) {
+                        for(int j = 0; j < 3; j++) {
+                            if(possibleValues[x*3+i][y*3+j].canBe(num)) {
+                                points.add(new Point(x*3+i, y*3+j));
+                            }
+                        }
+                    }
+                    //Check all points are on the same axis (horizontal)
+                    Point basePoint = new Point();
+                    ArrayList<Integer> yPoints = new ArrayList<Integer>();
+                    boolean aligned = false;
+                    for(int i = 0; i < points.size(); i++) {
+                        if(i == 0) {
+                            aligned = true;
+                            basePoint = points.get(i);
+                        } else if(points.get(i).x != basePoint.x) {
+                            aligned = false;
+                        }
+                        yPoints.add(points.get(i).y);
+                    }
+                    if(aligned) {
+                        for(int i = 0; i < possibleValues.length; i++) {
+                            if(!yPoints.contains(i)) {
+                                possibleValues[basePoint.x][i].removePossibility(num);
+                            }
+                        }
+                    }
+                    //Check all points are on the same axis (vertical)
+                    basePoint = new Point();
+                    ArrayList<Integer> xPoints = new ArrayList<Integer>();
+                    aligned = false;
+                    for(int i = 0; i < points.size(); i++) {
+                        if(i == 0) {
+                            aligned = true;
+                            basePoint = points.get(i);
+                        } else if(points.get(i).y != basePoint.y) {
+                            aligned = false;
+                            break;
+                        }
+                        xPoints.add(points.get(i).x);
+                    }
+                    if(aligned) {
+                        for(int i = 0; i < possibleValues.length; i++) {
+                            if(!xPoints.contains(i)) {
+                                System.out.print("x: " + i + " ");
+                                System.out.print("y: " + basePoint.y + " ");
+                                System.out.println(num);
+                                possibleValues[i][basePoint.y].removePossibility(num);
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
     
     public void insertSinglePossibilities() {
