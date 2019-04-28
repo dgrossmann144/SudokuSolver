@@ -78,10 +78,7 @@ public class Board {
         trimBoxes();
         trimVertical();
         trimHorizontal();
-//        printPossibleBoard();
-//        System.out.println("--------------------------------------------------------");
-//        trimComplex();
-//        printPossibleBoard();
+        trimComplex();
     }
     
     private void trimBoxes() {
