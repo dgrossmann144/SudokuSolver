@@ -27,7 +27,8 @@ public class SudokuSolver extends JPanel {
         SudokuSolver panel = new SudokuSolver();
         frame.getContentPane().add(panel);
         
-        for(int i = 0; i < 100; i++) {
+        while(!board.isSolved()) {
+            System.out.println(board.isSolved());
             board.trimPossibleValues();
             board.insertSinglePossibilities();
             

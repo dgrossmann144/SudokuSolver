@@ -3,7 +3,9 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class Board {
     private int[][] board;
@@ -169,9 +171,6 @@ public class Board {
                     if(aligned) {
                         for(int i = 0; i < possibleValues.length; i++) {
                             if(!xPoints.contains(i)) {
-                                System.out.print("x: " + i + " ");
-                                System.out.print("y: " + basePoint.y + " ");
-                                System.out.println(num);
                                 possibleValues[i][basePoint.y].removePossibility(num);
                             }
                         }
@@ -284,16 +283,44 @@ public class Board {
         }
     }
     
-//    public boolean isSolved() {
-//        Set<Integer> fullList = new HashSet<Integer>();
-//        Set<Integer> testList;
-//        
-//        for(int i = 0; i < board.length; i++) {
-//            for(int j = 0; j < board[i].length; j++) {
-//                
-//            }
-//        }
-//        
-//    }
+    public boolean isSolved() {
+        Set<Integer> horizontalList = new HashSet<Integer>();
+        Set<Integer> verticalList = new HashSet<Integer>();
+        Set<Integer> squareList = new HashSet<Integer>();
+        
+        for(int i = 0; i < board.length; i++) {
+            horizontalList.clear();
+            verticalList.clear();
+            for(int j = 0; j < board[i].length; j++) {
+                if(board[i][j] == 0) {
+                    return false;
+                }
+                if(!horizontalList.add(board[i][j])) {
+                    return false;
+                }
+                if(!verticalList.add(board[j][i])) {
+                    return false;
+                }
+            }
+        }
+        
+        for(int x = 0; x < 3; x++) {
+            for(int y = 0; y < 3; y++) {
+                squareList.clear();
+                for(int i = 0; i < 3; i++) {
+                    for(int j = 0; j < 3; j++) {
+                        if(board[x * 3 + i][y * 3 + j] == 0) {
+                            return false;
+                        }
+                        if(!squareList.add(board[x * 3 + i][y * 3 + j])) {
+                            return false;
+                        }
+                    }
+                }
+            }
+        }
+        
+        return true;
+    }
 }
 
